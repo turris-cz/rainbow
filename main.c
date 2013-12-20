@@ -12,6 +12,7 @@
 
 #include "configuration.h"
 #include "arg_parser.h"
+#include "reg_setters.h"
 
 #define PARSER_DEBUG
 
