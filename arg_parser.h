@@ -13,6 +13,7 @@
 
 #define PARAM_CMD_ENABLE "enable"
 #define PARAM_CMD_DISABLE "disable"
+#define PARAM_CMD_AUTO "auto"
 
 struct color {
 	const char *name;
@@ -21,7 +22,7 @@ struct color {
 
 bool parse_device(const char *param);
 bool parse_color(const char *param, unsigned int *color);
-bool parse_status(const char *param, bool *status);
+bool parse_status(const char *param, int *status);
 bool parse_intensity(const char *param, unsigned char *intensity);
 
 #endif //ARG_PARSER_H

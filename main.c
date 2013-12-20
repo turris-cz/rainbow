@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 	bool all_devices = false;
 	bool is_pseudo_device = false;
 	unsigned int color = 0;
-	bool enable = true;
+	int status = 1;
 	unsigned char intensity = 0;
 
 	while(argv[i] != NULL) {
@@ -62,15 +62,15 @@ int main(int argc, char **argv) {
 			}
 
 
-		} else if (parse_status(argv[i], &enable) && last_device != NULL) {
+		} else if (parse_status(argv[i], &status) && last_device != NULL) {
 			//This part has to be before color parser because "enable" is valid color in color parser
 			if (is_pseudo_device && all_devices) {
-				set_status(mem, DEV_PWR, enable);
-				set_status(mem, DEV_WAN, enable);
-				set_status(mem, DEV_WIFI, enable);
-				set_status(mem, DEV_LAN, enable);
+				set_status(mem, DEV_PWR, status);
+				set_status(mem, DEV_WAN, status);
+				set_status(mem, DEV_WIFI, status);
+				set_status(mem, DEV_LAN, status);
 			} else if (!is_pseudo_device) {
-				set_status(mem, last_device, enable);
+				set_status(mem, last_device, status);
 			}
 
 		} else if (parse_color(argv[i], &color) && last_device != NULL) {

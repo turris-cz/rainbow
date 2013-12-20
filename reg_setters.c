@@ -45,29 +45,53 @@ bool set_color(volatile unsigned char *mem, const char *dev, unsigned int color)
 	return true;
 }
 
-bool set_status(volatile unsigned char *mem, const char *dev, bool enable) {
-#ifdef PARSER_DEBUG
-	fprintf(stderr, "Setting status\tof device %s\tto %d\n", dev, enable);
-#endif
+bool set_status(volatile unsigned char *mem, const char *dev, int status) {
 	//0 means enabled... It's kinda confusing
-	unsigned char maskable_value;
-	if (enable) {
-		maskable_value = 0x00;
-	} else {
-		maskable_value = 0xFF;
-	}
 
 	if (strcmp(dev, DEV_PWR) == 0) {
-		mem[PWR_STATUS_REG] = PWR_STATUS_MASK & maskable_value;
+		if (status == 0) {
+			mem[PWR_OVERRIDE_REG] |= PWR_STATUS_MASK;
+			mem[PWR_STATUS_REG] |= PWR_STATUS_MASK;
+		} else if (status == 1) {
+			mem[PWR_OVERRIDE_REG] |= PWR_STATUS_MASK;
+			mem[PWR_STATUS_REG] &= ~PWR_STATUS_MASK;
+		} else if (status == 2) {
+			mem[PWR_OVERRIDE_REG] &= ~PWR_STATUS_MASK;
+		}
+
 
 	} else if (strcmp(dev, DEV_WAN) == 0) {
-		mem[WAN_STATUS_REG] = WAN_STATUS_MASK & maskable_value;
+		if (status == 0) {
+			mem[WAN_OVERRIDE_REG] |= WAN_STATUS_MASK;
+			mem[WAN_STATUS_REG] |= WAN_STATUS_MASK;
+		} else if (status == 1) {
+			mem[WAN_OVERRIDE_REG] |= WAN_STATUS_MASK;
+			mem[WAN_STATUS_REG] &= ~WAN_STATUS_MASK;
+		} else if (status == 2) {
+			mem[WAN_OVERRIDE_REG] &= ~WAN_STATUS_MASK;
+		}
 
 	} else if (strcmp(dev, DEV_WIFI) == 0) {
-		mem[WIFI_STATUS_REG] = WIFI_STATUS_MASK & maskable_value;
+		if (status == 0) {
+			mem[WIFI_OVERRIDE_REG] |= WIFI_STATUS_MASK;
+			mem[WIFI_STATUS_REG] |= WIFI_STATUS_MASK;
+		} else if (status == 1) {
+			mem[WIFI_OVERRIDE_REG] |= WIFI_STATUS_MASK;
+			mem[WIFI_STATUS_REG] &= ~WIFI_STATUS_MASK;
+		} else if (status == 2) {
+			mem[WIFI_OVERRIDE_REG] &= ~WIFI_STATUS_MASK;
+		}
 
 	} else if (strcmp(dev, DEV_LAN) == 0) {
-		mem[LAN_STATUS_REG] = LAN_STATUS_MASK & maskable_value;
+		if (status == 0) {
+			mem[LAN_OVERRIDE_REG] |= LAN_STATUS_MASK;
+			mem[LAN_STATUS_REG] |= LAN_STATUS_MASK;
+		} else if (status == 1) {
+			mem[LAN_OVERRIDE_REG] |= LAN_STATUS_MASK;
+			mem[LAN_STATUS_REG] &= ~LAN_STATUS_MASK;
+		} else if (status == 2) {
+			mem[LAN_OVERRIDE_REG] &= ~LAN_STATUS_MASK;
+		}
 
 	} else {
 		return false;

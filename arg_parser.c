@@ -5,11 +5,11 @@
 #include "arg_parser.h"
 
 static struct color colors[] = {
-	{ "red",	 0xFF0000},
-	{ "green",	 0x00FF00},
-	{ "blue",	 0x0000FF},
-	{ "white",       0xFFFFFF},
-	{ "black",       0x000000},
+	{ "red",	0xFF0000},
+	{ "green",	0x00FF00},
+	{ "blue",	0x0000FF},
+	{ "white",	0xFFFFFF},
+	{ "black",	0x000000},
 	{ NULL,	0}
 };
 
@@ -49,13 +49,17 @@ bool parse_color(const char *param, unsigned int *color) {
 	return false;
 }
 
-bool parse_status(const char *param, bool *status) {
+bool parse_status(const char *param, int *status) {
 	if (strcmp(param, PARAM_CMD_ENABLE) == 0) {
-		*status = true;
+		*status = 1;
 		return true;
 
 	} else if (strcmp(param, PARAM_CMD_DISABLE) == 0) {
-		*status = false;
+		*status = 0;
+		return true;
+
+	} else if (strcmp(param, PARAM_CMD_AUTO) == 0) {
+		*status = 2;
 		return true;
 	}
 
