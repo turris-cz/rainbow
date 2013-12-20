@@ -17,7 +17,6 @@
 
 int main(int argc, char **argv) {
 	int retval = 0;
-	//For now is even count of arguments expected
 	if (argc < 3) {
 		fprintf(stderr, "Bad agrument count\n");
 		return 1;
