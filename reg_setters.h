@@ -3,8 +3,7 @@
 
 #include <stdbool.h>
 
-bool set_color(volatile unsigned char *mem, const char *dev, unsigned int color);
-bool set_status(volatile unsigned char *mem, const char *dev, int enable);
-bool set_intensity(volatile unsigned char *mem, unsigned char intensity);
+void set_color(volatile unsigned char *mem, int dev, unsigned int color);
+void set_status(volatile unsigned char *mem, int dev, int status);
 
 #endif //REG_SETTERS_H

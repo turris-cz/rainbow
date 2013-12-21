@@ -5,106 +5,57 @@
 #include "arg_parser.h"
 #include "reg_setters.h"
 
+struct dev_config {
+	unsigned char color_r;
+	unsigned char color_g;
+	unsigned char color_b;
+	unsigned char override_reg;
+	unsigned char override_mask;
+	unsigned char status_reg;
+	unsigned char status_mask;
+};
+
+//OK, this is a overkill, but i hope it is universal solution for future
+static const struct dev_config devices[] = {
+	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_INTEN
+	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_INLVL
+	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_ALL
+	{ WAN_COLOR_R, WAN_COLOR_G, WAN_COLOR_B, G_OVERRIDE_REG, WAN_MASK, G_STATUS_REG, WAN_MASK }, //DEV_WAN
+	{ WIFI_COLOR_R, WIFI_COLOR_G, WIFI_COLOR_B, G_OVERRIDE_REG, WIFI_MASK, G_STATUS_REG, WIFI_MASK }, //DEV_WIFI
+	{ PWR_COLOR_R, PWR_COLOR_G, PWR_COLOR_B, G_OVERRIDE_REG, PWR_MASK, G_STATUS_REG, PWR_MASK }, //DEV_PWR
+	{ LAN_COLOR_R, LAN_COLOR_G, LAN_COLOR_B, G_OVERRIDE_REG, LAN_MASK, G_STATUS_REG, LAN_MASK }, //DEV_LAN
+	{ 0, 0, 0, G_OVERRIDE_REG, LAN1_MASK, G_STATUS_REG, LAN1_MASK }, //DEV_LAN1
+	{ 0, 0, 0, G_OVERRIDE_REG, LAN2_MASK, G_STATUS_REG, LAN2_MASK }, //DEV_LAN2
+	{ 0, 0, 0, G_OVERRIDE_REG, LAN3_MASK, G_STATUS_REG, LAN3_MASK }, //DEV_LAN3
+	{ 0, 0, 0, G_OVERRIDE_REG, LAN4_MASK, G_STATUS_REG, LAN4_MASK }, //DEV_LAN4
+	{ 0, 0, 0, G_OVERRIDE_REG, LAN5_MASK, G_STATUS_REG, LAN5_MASK } //DEV_LAN5
+};
+
 static void get_rgb_parts(unsigned int color, unsigned char *r, unsigned char *g, unsigned char *b) {
 	*r = ((color & 0xFF0000) >> 2*8);
 	*g = ((color & 0x00FF00) >> 8);
 	*b = (color & 0x0000FF);
 }
 
-bool set_color(volatile unsigned char *mem, const char *dev, unsigned int color) {
-#ifdef PARSER_DEBUG
-	fprintf(stderr, "Setting color\tof device %s\tto 0x%06X\n", dev, color);
-#endif
+void set_color(volatile unsigned char *mem, int dev, unsigned int color) {
 	unsigned char r, g, b;
 	get_rgb_parts(color, &r, &g, &b);
 
-	if (strcmp(dev, DEV_PWR) == 0) {
-		mem[PWR_COLOR_R] = r;
-		mem[PWR_COLOR_G] = g;
-		mem[PWR_COLOR_B] = b;
-
-	} else if (strcmp(dev, DEV_WAN) == 0) {
-		mem[WAN_COLOR_R] = r;
-		mem[WAN_COLOR_G] = g;
-		mem[WAN_COLOR_B] = b;
-
-	} else if (strcmp(dev, DEV_WIFI) == 0) {
-		mem[WIFI_COLOR_R] = r;
-		mem[WIFI_COLOR_G] = g;
-		mem[WIFI_COLOR_B] = b;
-
-	} else if (strcmp(dev, DEV_LAN) == 0) {
-		mem[LAN_COLOR_R] = r;
-		mem[LAN_COLOR_G] = g;
-		mem[LAN_COLOR_B] = b;
-
-	} else {
-		return false;
-	}
-
-	return true;
+	mem[devices[dev].color_r] = r;
+	mem[devices[dev].color_g] = g;
+	mem[devices[dev].color_b] = b;
 }
 
-bool set_status(volatile unsigned char *mem, const char *dev, int status) {
+void set_status(volatile unsigned char *mem, int dev, int status) {
 	//0 means enabled... It's kinda confusing
 
-	if (strcmp(dev, DEV_PWR) == 0) {
-		if (status == 0) {
-			mem[PWR_OVERRIDE_REG] |= PWR_STATUS_MASK;
-			mem[PWR_STATUS_REG] |= PWR_STATUS_MASK;
-		} else if (status == 1) {
-			mem[PWR_OVERRIDE_REG] |= PWR_STATUS_MASK;
-			mem[PWR_STATUS_REG] &= ~PWR_STATUS_MASK;
-		} else if (status == 2) {
-			mem[PWR_OVERRIDE_REG] &= ~PWR_STATUS_MASK;
-		}
-
-
-	} else if (strcmp(dev, DEV_WAN) == 0) {
-		if (status == 0) {
-			mem[WAN_OVERRIDE_REG] |= WAN_STATUS_MASK;
-			mem[WAN_STATUS_REG] |= WAN_STATUS_MASK;
-		} else if (status == 1) {
-			mem[WAN_OVERRIDE_REG] |= WAN_STATUS_MASK;
-			mem[WAN_STATUS_REG] &= ~WAN_STATUS_MASK;
-		} else if (status == 2) {
-			mem[WAN_OVERRIDE_REG] &= ~WAN_STATUS_MASK;
-		}
-
-	} else if (strcmp(dev, DEV_WIFI) == 0) {
-		if (status == 0) {
-			mem[WIFI_OVERRIDE_REG] |= WIFI_STATUS_MASK;
-			mem[WIFI_STATUS_REG] |= WIFI_STATUS_MASK;
-		} else if (status == 1) {
-			mem[WIFI_OVERRIDE_REG] |= WIFI_STATUS_MASK;
-			mem[WIFI_STATUS_REG] &= ~WIFI_STATUS_MASK;
-		} else if (status == 2) {
-			mem[WIFI_OVERRIDE_REG] &= ~WIFI_STATUS_MASK;
-		}
-
-	} else if (strcmp(dev, DEV_LAN) == 0) {
-		if (status == 0) {
-			mem[LAN_OVERRIDE_REG] |= LAN_STATUS_MASK;
-			mem[LAN_STATUS_REG] |= LAN_STATUS_MASK;
-		} else if (status == 1) {
-			mem[LAN_OVERRIDE_REG] |= LAN_STATUS_MASK;
-			mem[LAN_STATUS_REG] &= ~LAN_STATUS_MASK;
-		} else if (status == 2) {
-			mem[LAN_OVERRIDE_REG] &= ~LAN_STATUS_MASK;
-		}
-
-	} else {
-		return false;
+	if (status == ST_DISABLE) {
+		mem[devices[dev].override_reg] |= devices[dev].override_mask;
+		mem[devices[dev].status_reg] |= devices[dev].status_mask;
+	} else if (status == ST_ENABLE) {
+		mem[devices[dev].override_reg] |= devices[dev].override_mask;
+		mem[devices[dev].status_reg] &= ~(devices[dev].status_mask);
+	} else if (status == ST_AUTO) {
+		mem[devices[dev].override_reg] &= ~(devices[dev].override_mask);
 	}
-
-	return true;
-}
-
-bool set_intensity(volatile unsigned char *mem, unsigned char intensity) {
-	(void) mem; (void) intensity;
-#ifdef PARSER_DEBUG
-	fprintf(stderr, "Setting intensity\tto %u\n", intensity);
-#endif
-
-	return true;
 }

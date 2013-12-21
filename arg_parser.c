@@ -4,6 +4,11 @@
 
 #include "arg_parser.h"
 
+struct color {
+	const char *name;
+	int rgb;
+};
+
 static struct color colors[] = {
 	{ "red",	0xFF0000},
 	{ "green",	0x00FF00},
@@ -24,13 +29,36 @@ static bool get_color_from_name(const char *color_name, unsigned int *color) {
 	return false;
 }
 
-bool parse_device(const char *param) {
-	if (strcmp(param, DEV_PWR) == 0 || strcmp(param, DEV_WIFI) == 0 || strcmp(param, DEV_WAN) == 0 ||
-		strcmp(param, DEV_LAN) == 0 || strcmp(param, DEV_PSEUDO_ALL) == 0 || strcmp(param, DEV_PSEUDO_INTENSITY) == 0) {
-		return true;
+bool parse_device(const char *param, int *device) {
+	if (strcmp(param, KW_ALL) == 0) {
+		*device = DEV_ALL;
+	} else if (strcmp(param, KW_INTEN) == 0) {
+		*device = DEV_INTEN;
+	} else if (strcmp(param, KW_INLVL) == 0) {
+		*device = DEV_INLVL;
+	} else if (strcmp(param, KW_WAN) == 0) {
+		*device = DEV_WAN;
+	} else if (strcmp(param, KW_WIFI) == 0) {
+		*device = DEV_WIFI;
+	} else if (strcmp(param, KW_PWR) == 0) {
+		*device = DEV_PWR;
+	} else if (strcmp(param, KW_LAN) == 0) {
+		*device = DEV_LAN;
+	} else if (strcmp(param, KW_LAN1) == 0) {
+		*device = DEV_LAN1;
+	} else if (strcmp(param, KW_LAN2) == 0) {
+		*device = DEV_LAN2;
+	} else if (strcmp(param, KW_LAN3) == 0) {
+		*device = DEV_LAN3;
+	} else if (strcmp(param, KW_LAN4) == 0) {
+		*device = DEV_LAN4;
+	} else if (strcmp(param, KW_LAN5) == 0) {
+		*device = DEV_LAN5;
+	} else {
+		return false;
 	}
 
-	return false;
+	return true;
 }
 
 bool parse_color(const char *param, unsigned int *color) {
@@ -50,27 +78,37 @@ bool parse_color(const char *param, unsigned int *color) {
 }
 
 bool parse_status(const char *param, int *status) {
-	if (strcmp(param, PARAM_CMD_ENABLE) == 0) {
-		*status = 1;
+	if (strcmp(param, KW_ENABLE) == 0) {
+		*status = ST_ENABLE;
 		return true;
 
-	} else if (strcmp(param, PARAM_CMD_DISABLE) == 0) {
-		*status = 0;
+	} else if (strcmp(param, KW_DISABLE) == 0) {
+		*status = ST_DISABLE;
 		return true;
 
-	} else if (strcmp(param, PARAM_CMD_AUTO) == 0) {
-		*status = 2;
+	} else if (strcmp(param, KW_AUTO) == 0) {
+		*status = ST_AUTO;
 		return true;
 	}
 
 	return false;
 }
 
-bool parse_intensity(const char *param, unsigned char *intensity) {
-	if (strchr(param, '%') != NULL) {
-		*intensity = strtol(param, NULL, 10);
-		return true;
+bool parse_number(const char *param, unsigned char *number) {
+	char *endptr = param;
+	int tmp_number = strtol(param, &endptr, 10);
+
+	if (param == endptr) {
+		//There wheren't any number
+		return false;
 	}
 
-	return false;
+	if (tmp_number < 0 || tmp_number > 255) {
+		//Target value must be unsigned byte
+		return false;
+	}
+
+	*number = tmp_number;
+
+	return true;
 }

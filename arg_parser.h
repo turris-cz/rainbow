@@ -3,26 +3,43 @@
 
 #include <stdbool.h>
 
-#define DEV_WAN		"wan"
-#define DEV_LAN		"lan"
-#define DEV_WIFI	"wifi"
-#define DEV_PWR		"pwr"
+#define KW_INTEN	"intensity"
+#define KW_INLVL	"level"
+#define KW_ALL		"all"
+#define KW_WAN		"wan"
+#define KW_WIFI		"wifi"
+#define KW_PWR		"pwr"
+#define KW_LAN		"lan"
+#define KW_LAN1		"lan1"
+#define KW_LAN2		"lan2"
+#define KW_LAN3		"lan3"
+#define KW_LAN4		"lan4"
+#define KW_LAN5		"lan5"
+#define KW_ENABLE	"enable"
+#define KW_DISABLE	"disable"
+#define KW_AUTO		"auto"
 
-#define DEV_PSEUDO_ALL			"all"
-#define DEV_PSEUDO_INTENSITY	"intensity"
+#define DEV_UNDEF	-1
+#define DEV_INTEN	0
+#define DEV_INLVL	1
+#define DEV_ALL		2
+#define DEV_WAN		3
+#define DEV_WIFI	4
+#define DEV_PWR		5
+#define DEV_LAN		6
+#define DEV_LAN1	7
+#define DEV_LAN2	8
+#define DEV_LAN3	9
+#define DEV_LAN4	10
+#define DEV_LAN5	11
 
-#define PARAM_CMD_ENABLE "enable"
-#define PARAM_CMD_DISABLE "disable"
-#define PARAM_CMD_AUTO "auto"
+#define ST_DISABLE	0
+#define ST_ENABLE	1
+#define ST_AUTO		2
 
-struct color {
-	const char *name;
-	int rgb;
-};
-
-bool parse_device(const char *param);
+bool parse_device(const char *param, int *device);
 bool parse_color(const char *param, unsigned int *color);
 bool parse_status(const char *param, int *status);
-bool parse_intensity(const char *param, unsigned char *intensity);
+bool parse_number(const char *param, unsigned char *number);
 
 #endif //ARG_PARSER_H
