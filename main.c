@@ -9,10 +9,17 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "configuration.h"
 #include "arg_parser.h"
 #include "reg_setters.h"
+
+static struct option long_options[] = {
+	{"help", no_argument, 0, 'h'},
+	{"daemonize", no_argument, 0, 'D'},
+	{0, 0, 0, 0}
+};
 
 void help() {
 	fprintf(stderr,
@@ -27,6 +34,21 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
+	//Parse options
+	int c; //returned char
+	bool daemonize = false;
+
+	while ((c = getopt_long(argc, argv, "hD", long_options, NULL)) != -1) {
+		switch (c) {
+			case 'h':
+				help();
+				return 0;
+				break;
+			case 'D':
+				daemonize = true;
+				break;
+		}
+	}
 
 	bool was_input_error = false;
 
@@ -44,7 +66,7 @@ int main(int argc, char **argv) {
 		return 2;
 	}
 
-	int i = 1;
+	int i = optind;
 	int last_device = DEV_UNDEF;
 	int act_device = DEV_UNDEF;
 	unsigned int color = 0;
@@ -95,6 +117,25 @@ int main(int argc, char **argv) {
 		}
 		i++;
 	}
+	if (daemonize) {
+		pid_t pid = fork();
+		if (pid < 0) {
+			printf(stderr, "fork failed\n");
+			return 3;
+		} else if (pid != 0) {
+			return 0; //I'm parent
+		} else {
+			//TODO: Add some return code checking
+			chdir("/");
+			int dev_null_fd = open("/dev/null", O_RDWR);
+			dup2(dev_null_fd, 0); //redirect stdin
+			dup2(dev_null_fd, 1); //redirect stdout
+			dup2(dev_null_fd, 2); //redirect stderr
+		}
+	}
+
+	//Do some daemon stuff
+	sleep(10);
 
 	//Clean-up phase
 	if (munmap(mem, MAPPED_SIZE) < 0) {
