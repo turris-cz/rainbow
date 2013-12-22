@@ -14,12 +14,21 @@
 #include "arg_parser.h"
 #include "reg_setters.h"
 
+void help() {
+	fprintf(stderr,
+		"Bad argument count\n"
+		"TODO: Write help content\n"
+	);
+}
+
 int main(int argc, char **argv) {
-	int retval = 0;
-	if (argc < 3) {
-		fprintf(stderr, "Bad agrument count\n");
+	if (argc <= 1) {
+		help();
 		return 1;
 	}
+
+
+	bool was_input_error = false;
 
 	//Open memory raw device
 	int mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -81,7 +90,7 @@ int main(int argc, char **argv) {
 			}
 		} else {
 			fprintf(stderr, "PARSE ERROR\n");
-			retval = 1;
+			was_input_error = true;
 			break;
 		}
 		i++;
@@ -94,5 +103,9 @@ int main(int argc, char **argv) {
 
 	close(mem_fd);
 
-	return retval;
+	if (was_input_error) {
+		return 1;
+	}
+
+	return 0;
 }
