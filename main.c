@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
 				set_color(mem, last_device, color);
 			}
 
-		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF && (last_device == DEV_INTEN || last_device == DEV_INLVL)) {
+		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF) {
 			if (last_device == DEV_INTEN) {
 				printf("INTENSTITY not supported yet. (set intenstity to  %d)\n", number);
 			} else if (last_device == DEV_INLVL) {
