@@ -54,6 +54,8 @@ bool parse_device(const char *param, int *device) {
 		*device = DEV_LAN4;
 	} else if (strcmp(param, KW_LAN5) == 0) {
 		*device = DEV_LAN5;
+	} else if (strcmp(param, KW_BINMASK) == 0) {
+		*device = DEV_BINMASK;
 	} else {
 		return false;
 	}
@@ -96,7 +98,7 @@ bool parse_status(const char *param, int *status) {
 
 bool parse_number(const char *param, unsigned char *number) {
 	char *endptr = param;
-	int tmp_number = strtol(param, &endptr, 10);
+	long int tmp_number = strtol(param, &endptr, 0);
 
 	if (param == endptr) {
 		//There wheren't any number

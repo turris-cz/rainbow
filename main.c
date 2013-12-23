@@ -104,11 +104,22 @@ int main(int argc, char **argv) {
 				set_color(mem, last_device, color);
 			}
 
-		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF && (last_device == DEV_INTEN || last_device == DEV_INLVL)) {
+		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF) {
 			if (last_device == DEV_INTEN) {
 				printf("INTENSTITY not supported yet. (set intenstity to  %d)\n", number);
 			} else if (last_device == DEV_INLVL) {
 				printf("INTENSTITY LEVEL not supported yet. set intensity level to %d\n", number);
+			} else if (last_device == DEV_BINMASK) {
+				if (number & 0x80) set_status(mem, DEV_WAN, ST_ENABLE); else set_status(mem, DEV_WAN, ST_DISABLE);
+				if (number & 0x40) set_status(mem, DEV_LAN1, ST_ENABLE); else set_status(mem, DEV_LAN1, ST_DISABLE);
+				if (number & 0x20) set_status(mem, DEV_LAN2, ST_ENABLE); else set_status(mem, DEV_LAN2, ST_DISABLE);
+				if (number & 0x10) set_status(mem, DEV_LAN3, ST_ENABLE); else set_status(mem, DEV_LAN3, ST_DISABLE);
+				if (number & 0x08) set_status(mem, DEV_LAN4, ST_ENABLE); else set_status(mem, DEV_LAN4, ST_DISABLE);
+				if (number & 0x04) set_status(mem, DEV_LAN5, ST_ENABLE); else set_status(mem, DEV_LAN5, ST_DISABLE);
+				if (number & 0x02) set_status(mem, DEV_WIFI, ST_ENABLE); else set_status(mem, DEV_WIFI, ST_DISABLE);
+				if (number & 0x01) set_status(mem, DEV_PWR, ST_ENABLE); else set_status(mem, DEV_PWR, ST_DISABLE);
+			} else {
+				fprintf(stderr, "nespecifikovane device v number\n");
 			}
 		} else {
 			fprintf(stderr, "PARSE ERROR\n");

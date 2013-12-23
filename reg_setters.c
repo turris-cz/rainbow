@@ -17,9 +17,6 @@ struct dev_config {
 
 //OK, this is a overkill, but i hope it is universal solution for future
 static const struct dev_config devices[] = {
-	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_INTEN
-	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_INLVL
-	{ 0, 0, 0, 0, 0, 0, 0 }, //DEV_ALL
 	{ WAN_COLOR_R, WAN_COLOR_G, WAN_COLOR_B, G_OVERRIDE_REG, WAN_MASK, G_STATUS_REG, WAN_MASK }, //DEV_WAN
 	{ WIFI_COLOR_R, WIFI_COLOR_G, WIFI_COLOR_B, G_OVERRIDE_REG, WIFI_MASK, G_STATUS_REG, WIFI_MASK }, //DEV_WIFI
 	{ PWR_COLOR_R, PWR_COLOR_G, PWR_COLOR_B, G_OVERRIDE_REG, PWR_MASK, G_STATUS_REG, PWR_MASK }, //DEV_PWR
@@ -29,6 +26,7 @@ static const struct dev_config devices[] = {
 	{ 0, 0, 0, G_OVERRIDE_REG, LAN3_MASK, G_STATUS_REG, LAN3_MASK }, //DEV_LAN3
 	{ 0, 0, 0, G_OVERRIDE_REG, LAN4_MASK, G_STATUS_REG, LAN4_MASK }, //DEV_LAN4
 	{ 0, 0, 0, G_OVERRIDE_REG, LAN5_MASK, G_STATUS_REG, LAN5_MASK } //DEV_LAN5
+	//All other devices are pseudodevices and they hasn't any configuration
 };
 
 static void get_rgb_parts(unsigned int color, unsigned char *r, unsigned char *g, unsigned char *b) {
