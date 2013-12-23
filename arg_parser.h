@@ -33,6 +33,7 @@
 #define DEV_ALL		9
 #define DEV_INTEN	10
 #define DEV_INLVL	11
+#define DEV_BINMASK	12
 
 #define ST_DISABLE	0
 #define ST_ENABLE	1
