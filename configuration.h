@@ -23,6 +23,7 @@
 #define WIFI_COLOR_G 0x1A
 #define WIFI_COLOR_B 0x1B
 #define WIFI_MASK 0x40
+#define WIFI_HW_STATUS_REG 0x08
 
 #define PWR_COLOR_R 0x1C
 #define PWR_COLOR_G 0x1D
