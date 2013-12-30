@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
 	if (daemonize) {
 		pid_t pid = fork();
 		if (pid < 0) {
-			printf(stderr, "fork failed\n");
+			fprintf(stderr, "Fork failed!\n");
 			return 3;
 		} else if (pid != 0) {
 			return 0; //I'm parent

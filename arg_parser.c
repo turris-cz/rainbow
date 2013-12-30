@@ -97,7 +97,7 @@ bool parse_status(const char *param, int *status) {
 }
 
 bool parse_number(const char *param, unsigned char *number) {
-	char *endptr = param;
+	char *endptr = (char *)param;
 	long int tmp_number = strtol(param, &endptr, 0);
 
 	if (param == endptr) {
