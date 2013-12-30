@@ -14,6 +14,7 @@
 #include "configuration.h"
 #include "arg_parser.h"
 #include "reg_setters.h"
+#include "daemon.h"
 
 static struct option long_options[] = {
 	{"help", no_argument, 0, 'h'},
@@ -128,6 +129,7 @@ int main(int argc, char **argv) {
 		}
 		i++;
 	}
+
 	if (daemonize) {
 		pid_t pid = fork();
 		if (pid < 0) {
@@ -142,11 +144,11 @@ int main(int argc, char **argv) {
 			dup2(dev_null_fd, 0); //redirect stdin
 			dup2(dev_null_fd, 1); //redirect stdout
 			dup2(dev_null_fd, 2); //redirect stderr
+
+			//Do some daemon stuff
+			do_some_daemon_stuff(mem);
 		}
 	}
-
-	//Do some daemon stuff
-	sleep(10);
 
 	//Clean-up phase
 	if (munmap(mem, MAPPED_SIZE) < 0) {

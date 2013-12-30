@@ -4,8 +4,8 @@ CC=/home/robin/work/openwrt-testing/staging_dir/toolchain-powerpc_gcc-4.6-linaro
 FLAGS=-Wall -Wextra -pedantic -std=gnu99 -O0 -g
 DEFINES=-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
-$(BIN): main.o arg_parser.o reg_setters.o
-	$(CC) $(FLAGS) $(DEFINES) -o $(BIN) main.o arg_parser.o reg_setters.o
+$(BIN): main.o arg_parser.o reg_setters.o daemon.o
+	$(CC) $(FLAGS) $(DEFINES) -o $(BIN) main.o arg_parser.o reg_setters.o daemon.o
 
 main.o: main.c
 	$(CC) $(FLAGS) $(DEFINES) -c -o main.o main.c
@@ -15,6 +15,9 @@ arg_parser.o: arg_parser.c
 
 reg_setters.o: reg_setters.c
 	$(CC) $(FLAGS) $(DEFINES) -c -o reg_setters.o reg_setters.c
+
+daemon.o: daemon.c
+	$(CC) $(FLAGS) $(DEFINES) -c -o daemon.o daemon.c
 
 clean:
 	rm *.o
