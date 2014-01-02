@@ -8,8 +8,8 @@
 #include "configuration.h"
 
 #define BUFFSIZE 512
-#define SLEEP_TIME_USEC 250000
-#define FLASH_DELAY 80000
+#define SLEEP_TIME_USEC 150000
+#define FLASH_DELAY 100000
 #define SNIFF_FILE_NET "/proc/net/dev"
 #define MAX_LEN_INTERFACE_NAME 20
 #define WIFI_DEV_NAME "wlan0:"
