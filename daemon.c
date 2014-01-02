@@ -86,7 +86,7 @@ static bool iteration_network(volatile unsigned char *mem, struct network_state 
 void do_some_daemon_stuff(volatile unsigned char *mem) {
 	struct network_state network = { 0, 0, false };
 
-	for (int i = 0; i < 500; i++) {
+	while (true) {
 		iteration_network(mem, &network);
 		usleep(SLEEP_TIME_USEC);
 	}
