@@ -23,9 +23,46 @@ static struct option long_options[] = {
 };
 
 void help() {
-	fprintf(stderr,
-		"Bad argument count\n"
-		"TODO: Write help content\n"
+	fprintf(stdout,
+		"Usage:\n"
+		"  Show this help: rainbow --help of -h\n"
+		"  Start as daemon: rainbow -D DEV_CONFIGURATION [DEV_CONFIGURATION ...]]\n"
+		"  Set devices: rainbow DEV_CONFIGURATION [DEV_CONFIGURATION ...]\n"
+		"\n"
+		"DEV_CONFIGURATION is one of the next options:\n"
+		"DEV COLOR STATUS or DEV STATUS COLOR or DEV STATUS or DEV COLOR, where:\n"
+		"  DEV: 'wan' (LED of WAN port), 'lan' (LEDs of all LAN ports),\n"
+		"       'wifi' (LED of WiFI), 'pwr' (LED of Power signalization)\n"
+		"       or alias 'all' for all previous devices\n"
+		"  COLOR: name of predefined color (red, blue, green, white, black)\n"
+		"         or 3 bytes for RGB, so red is 'FF0000', green '00FF00'\n"
+		"         blue '0000FF' etc.\n"
+		"  STATUS: 'enable' (device is shining), 'disable' (device is off)\n"
+		"          'auto' (device is operated by HW - typically flashing)\n"
+		"\n"
+		"DEV STATUS, where:\n"
+		"  DEV: 'lan1', 'lan2', ..., 'lan5' (one of the LAN LEDs)\n"
+		"  STATUS: the same meaning like above\n"
+		"\n"
+		"'intensity' NUMBER, where:\n"
+		"  NUMBER is number from 0 to 255 that represents the light intensity of all LEDs\n"
+		"\n"
+		"'intensity level' NUMBER, where:\n"
+		"  NUMBER is number from 0 to 7 that represents one of the predefined values of\n"
+		"  light intensity\n"
+		"\n"
+		"'binmask' NUMBER, where:\n"
+		"  NUMBER is number its binary representation is used as mark for status of\n"
+		"  all of the LEDs. MSB is WAN LED and LSB is Power LED.\n"
+		"\n"
+		"Examples:\n"
+		"rainbow all blue auto - reset status of all LEDs and set their color to blue\n"
+		"rainbow all blue pwr red - set color of all LEDs to blue except the Power one\n"
+		"rainbow all enable wan auto - all LEDs will shining except the LED of WAN port\n"
+		"                              that will flashing according to traffic\n"
+
+
+
 	);
 }
 
@@ -120,10 +157,12 @@ int main(int argc, char **argv) {
 				if (number & 0x02) set_status(mem, DEV_WIFI, ST_ENABLE); else set_status(mem, DEV_WIFI, ST_DISABLE);
 				if (number & 0x01) set_status(mem, DEV_PWR, ST_ENABLE); else set_status(mem, DEV_PWR, ST_DISABLE);
 			} else {
-				fprintf(stderr, "nespecifikovane device v number\n");
+				fprintf(stderr, "Parse error - unspecified device for number.\nUse rainbow -h for help.\n");
+				was_input_error = true;
+				break;
 			}
 		} else {
-			fprintf(stderr, "PARSE ERROR\n");
+			fprintf(stderr, "Parse error.\nUse rainbow -h for help.\n");
 			was_input_error = true;
 			break;
 		}
