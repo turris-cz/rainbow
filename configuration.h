@@ -33,4 +33,6 @@
 #define BASE_REGISTER 0xFFA00000
 #define MAPPED_SIZE 4096
 
+#define PID_FILE_PATH "/var/run/rainbow.pid"
+
 #endif //CONFIGURATION_H

@@ -135,8 +135,19 @@ int main(int argc, char **argv) {
 		if (pid < 0) {
 			fprintf(stderr, "Fork failed!\n");
 			return 3;
+
 		} else if (pid != 0) {
+			FILE *pid_file = fopen(PID_FILE_PATH, "w");
+			if (pid_file == NULL)  {
+				fprintf(stderr, "Cannot create pid file.\n");
+				return 3;
+			}
+
+			fprintf(pid_file, "%d\n", (int) pid);
+			fclose(pid_file);
+
 			return 0; //I'm parent
+
 		} else {
 			//TODO: Add some return code checking
 			chdir("/");
