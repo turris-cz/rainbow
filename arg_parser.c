@@ -71,7 +71,15 @@ bool parse_color(const char *param, unsigned int *color) {
 
 	//Is param color in format AABBCC?
 	if (strlen(param) == 6) {
-		*color = (unsigned int) strtol(param, NULL, 16);
+		char *endptr = (char *)param;
+		long int tmp_number = strtol(param, &endptr, 16);
+
+		if (param == endptr) {
+			//There wheren't any number
+			return false;
+		}
+
+		*color = (unsigned int) tmp_number;
 		return true;
 	}
 
