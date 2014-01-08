@@ -1,0 +1,14 @@
+Rainbow is part of Project Turris. This application is very closely connected
+with Turris router hardware and the most of this source code will be useless on
+any other HW.
+
+This source code consists of 2 main parts:
+
+	1) Command line utility that enables to user to set status, color and
+	intensity of all LEDs of Turris router. For more informations run command
+	'rainbow --help'.
+
+	2) Daemon with basic feature: Turris has wireless card in mini PCI slot and
+	so it is impossible to show wireless radio status by HW activities. Rainbow
+	demon is checking wireless status and performs SW emulation of the expected
+	behavior by setting WiFi LED status.
