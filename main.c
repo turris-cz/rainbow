@@ -65,9 +65,6 @@ void help() {
 		"  STATUS: the same meaning like above\n"
 		"\n"
 		"'intensity' NUMBER, where:\n"
-		"  NUMBER is number from 0 to 255 that represents the light intensity of all LEDs\n"
-		"\n"
-		"'intensity level' NUMBER, where:\n"
 		"  NUMBER is number from 0 to 7 that represents one of the predefined values of\n"
 		"  light intensity\n"
 		"\n"
@@ -164,12 +161,8 @@ int main(int argc, char **argv) {
 
 		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF) {
 			if (last_device == DEV_INTEN) {
-				//printf("INTENSTITY not supported yet. (set intenstity to  %d)\n", number);
-				mem[INTENS_REG] = number;
-			} else if (last_device == DEV_INLVL) {
-				//printf("INTENSTITY LEVEL not supported yet. set intensity level to %d\n", number);
-
-				if (number >= 0 && number <= 7) {
+				//Condition (number >= 0 && number <= 7) causes warning
+				if (number <= 7) {
 					mem[INTENSLVL_REG] = number;
 				} else {
 					fprintf(stderr, "Parse error - number is not in range\nUse rainbow -h for help.\n");

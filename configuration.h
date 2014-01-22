@@ -50,7 +50,6 @@
 #define PWR_COLOR_B 0x1E
 #define PWR_MASK 0x80
 
-#define INTENS_REG 0x28
 #define INTENSLVL_REG 0x20
 
 #define BASE_REGISTER 0xFFA00000

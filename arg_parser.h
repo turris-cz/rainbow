@@ -34,7 +34,6 @@
 #define KW_LAN5		"lan5"
 #define KW_ALL		"all"
 #define KW_INTEN	"intensity"
-#define KW_INLVL	"level"
 #define KW_BINMASK	"binmask"
 #define KW_ENABLE	"enable"
 #define KW_DISABLE	"disable"
@@ -52,8 +51,7 @@
 #define DEV_LAN5	8
 #define DEV_ALL		9
 #define DEV_INTEN	10
-#define DEV_INLVL	11
-#define DEV_BINMASK	12
+#define DEV_BINMASK	11
 
 #define ST_DISABLE	0
 #define ST_ENABLE	1

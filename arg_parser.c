@@ -54,8 +54,6 @@ bool parse_device(const char *param, int *device) {
 		*device = DEV_ALL;
 	} else if (strcmp(param, KW_INTEN) == 0) {
 		*device = DEV_INTEN;
-	} else if (strcmp(param, KW_INLVL) == 0) {
-		*device = DEV_INLVL;
 	} else if (strcmp(param, KW_WAN) == 0) {
 		*device = DEV_WAN;
 	} else if (strcmp(param, KW_WIFI) == 0) {
