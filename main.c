@@ -164,9 +164,16 @@ int main(int argc, char **argv) {
 
 		} else if (parse_number(argv[i], &number) && last_device != DEV_UNDEF) {
 			if (last_device == DEV_INTEN) {
-				printf("INTENSTITY not supported yet. (set intenstity to  %d)\n", number);
+				//printf("INTENSTITY not supported yet. (set intenstity to  %d)\n", number);
+				mem[INTENS_REG] = number;
 			} else if (last_device == DEV_INLVL) {
-				printf("INTENSTITY LEVEL not supported yet. set intensity level to %d\n", number);
+				//printf("INTENSTITY LEVEL not supported yet. set intensity level to %d\n", number);
+
+				if (number >= 0 && number <= 7) {
+					mem[INTENSLVL_REG] = number;
+				} else {
+					fprintf(stderr, "Parse error - number is not in range\nUse rainbow -h for help.\n");
+				}
 			} else if (last_device == DEV_BINMASK) {
 				if (number & 0x80) set_status(mem, DEV_WAN, ST_ENABLE); else set_status(mem, DEV_WAN, ST_DISABLE);
 				if (number & 0x40) set_status(mem, DEV_LAN1, ST_ENABLE); else set_status(mem, DEV_LAN1, ST_DISABLE);
