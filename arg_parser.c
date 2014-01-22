@@ -74,6 +74,8 @@ bool parse_device(const char *param, int *device) {
 		*device = DEV_LAN5;
 	} else if (strcmp(param, KW_BINMASK) == 0) {
 		*device = DEV_BINMASK;
+	} else if (strcmp(param, KW_GET) == 0) {
+		*device = DEV_GET;
 	} else {
 		return false;
 	}

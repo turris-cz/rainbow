@@ -72,6 +72,9 @@ void help() {
 		"  NUMBER is number its binary representation is used as mark for status of\n"
 		"  all of the LEDs. MSB is WAN LED and LSB is Power LED.\n"
 		"\n"
+		"'get' VALUE, where:\n"
+		"  VALUE is 'intensity' (no more getters aren't available for now)\n"
+		"\n"
 		"Examples:\n"
 		"rainbow all blue auto - reset status of all LEDs and set their color to blue\n"
 		"rainbow all blue pwr red - set color of all LEDs to blue except the Power one\n"
@@ -131,8 +134,9 @@ int main(int argc, char **argv) {
 	while(argv[i] != NULL) {
 		if (parse_device(argv[i], &act_device)) {
 			//Space for some special rules
-			if (last_device == DEV_INTEN && act_device == DEV_INLVL) {
-				last_device = DEV_INLVL;
+			if (last_device == DEV_GET && act_device == DEV_INTEN) {
+				printf("%d\n", mem[INTENSLVL_REG]);
+
 			} else {
 				//If there aren't any special rules, just set value
 				last_device = act_device;

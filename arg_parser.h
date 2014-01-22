@@ -38,6 +38,7 @@
 #define KW_ENABLE	"enable"
 #define KW_DISABLE	"disable"
 #define KW_AUTO		"auto"
+#define KW_GET		"get"
 
 #define DEV_UNDEF	-1
 #define DEV_WAN		0
@@ -52,6 +53,7 @@
 #define DEV_ALL		9
 #define DEV_INTEN	10
 #define DEV_BINMASK	11
+#define DEV_GET		12
 
 #define ST_DISABLE	0
 #define ST_ENABLE	1
