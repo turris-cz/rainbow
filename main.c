@@ -225,7 +225,7 @@ int main(int argc, char **argv) {
 	}
 
 	//Clean-up phase
-	if (munmap(mem, MAPPED_SIZE) < 0) {
+	if (munmap((void *)mem, MAPPED_SIZE) < 0) {
 		fprintf(stderr, "Unmap error\n");
 	}
 
