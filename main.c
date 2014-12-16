@@ -110,6 +110,7 @@ int main(int argc, char **argv) {
 
 	bool was_input_error = false;
 
+#ifndef DEBUG
 	//Open memory raw device
 	int mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
 	if (mem_fd < 0) {
@@ -119,6 +120,9 @@ int main(int argc, char **argv) {
 
 	//Map physical memory to virtual address space
 	volatile unsigned char *mem = mmap(NULL, MAPPED_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mem_fd, BASE_REGISTER);
+#else
+	volatile unsigned char *mem = malloc(MAPPED_SIZE);
+#endif
 	if (mem == NULL) {
 		fprintf(stderr, "Memory map error.\n");
 		return 2;
@@ -224,12 +228,14 @@ int main(int argc, char **argv) {
 		}
 	}
 
+#ifndef DEBUG
 	//Clean-up phase
 	if (munmap((void *)mem, MAPPED_SIZE) < 0) {
 		fprintf(stderr, "Unmap error\n");
 	}
 
 	close(mem_fd);
+#endif
 
 	if (was_input_error) {
 		return 1;
