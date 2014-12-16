@@ -107,6 +107,10 @@ bool parse_color(const char *param, unsigned int *color) {
 	return false;
 }
 
+bool parse_turrisdefault(const char *param) {
+	return (strcmp(param, KW_TURRISDEF) == 0);
+}
+
 bool parse_status(const char *param, int *status) {
 	if (strcmp(param, KW_ENABLE) == 0) {
 		*status = ST_ENABLE;

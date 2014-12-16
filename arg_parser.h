@@ -39,6 +39,7 @@
 #define KW_DISABLE	"disable"
 #define KW_AUTO		"auto"
 #define KW_GET		"get"
+#define KW_TURRISDEF	"turris-default"
 
 #define DEV_UNDEF	-1
 #define DEV_WAN		0
@@ -63,5 +64,6 @@ bool parse_device(const char *param, int *device);
 bool parse_color(const char *param, unsigned int *color);
 bool parse_status(const char *param, int *status);
 bool parse_number(const char *param, unsigned char *number);
+bool parse_turrisdefault(const char *param);
 
 #endif //ARG_PARSER_H

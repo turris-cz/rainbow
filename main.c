@@ -35,6 +35,7 @@
 #include "arg_parser.h"
 #include "reg_setters.h"
 #include "daemon.h"
+#include "turris.h"
 
 static struct option long_options[] = {
 	{"help", no_argument, 0, 'h'},
@@ -158,6 +159,17 @@ int main(int argc, char **argv) {
 			}
 
 		} else if (parse_color(argv[i], &color) && last_device != DEV_UNDEF && last_device != DEV_LAN1 && last_device != DEV_LAN2 && last_device != DEV_LAN3 && last_device != DEV_LAN4 && last_device != DEV_LAN5) {
+			if (last_device == DEV_ALL) {
+				set_color(mem, DEV_PWR, color);
+				set_color(mem, DEV_WAN, color);
+				set_color(mem, DEV_WIFI, color);
+				set_color(mem, DEV_LAN, color);
+			} else {
+				set_color(mem, last_device, color);
+			}
+
+		} else if (parse_turrisdefault(argv[i]) && last_device != DEV_UNDEF && last_device != DEV_LAN1 && last_device != DEV_LAN2 && last_device != DEV_LAN3 && last_device != DEV_LAN4 && last_device != DEV_LAN5) {
+			unsigned int color = turris_get_default_color(turris_detect_version());
 			if (last_device == DEV_ALL) {
 				set_color(mem, DEV_PWR, color);
 				set_color(mem, DEV_WAN, color);
