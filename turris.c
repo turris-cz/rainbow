@@ -2,7 +2,7 @@
  * Rainbow is tool for changing color and status of LEDs of the Turris router
  * Rainbow daemon provides indication of WiFi status by controlling its LED
  *
- * Copyright (C) 2013 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+ * Copyright (C) 2014 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
