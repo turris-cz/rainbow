@@ -51,7 +51,6 @@ struct network_state {
 
 struct smrt_state {
 	int prev_state_cat;
-	time_t prev_start;
 	bool silent_second;
 };
 
@@ -234,7 +233,7 @@ static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) 
 
 void do_some_daemon_stuff(volatile unsigned char *mem) {
 	struct network_state network = { 0, 0, false };
-	struct smrt_state smrt = { SMRT_STATE_OK, 0, false };
+	struct smrt_state smrt = { SMRT_STATE_OK, false };
 
 	while (true) {
 		iteration_network(mem, &network);
