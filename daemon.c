@@ -2,7 +2,7 @@
  * Rainbow is tool for changing color and status of LEDs of the Turris router
  * Rainbow daemon provides indication of WiFi status by controlling its LED
  *
- * Copyright (C) 2013 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+ * Copyright (C) 2013, 2015 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,15 +117,12 @@ static bool iteration_network(volatile unsigned char *mem, struct network_state 
 		);
 
 		if (strcmp(WIFI_DEV_NAME, name) == 0) {
-			//printf("R: [%llu, %llu, %llu] T:[%llu, %llu, %llu]\n", state->last_r, r_packets, (r_packets - state->last_r), state->last_t, t_packets, (t_packets - state->last_t));
 			state->wifi_active = true;
-			//kontrola zmeny hodnot
 			if (((r_packets - state->last_r) > EPS) || ((t_packets - state->last_t) > EPS)) {
 				//make flash
 				mem[WIFI_HW_STATUS_REG] = WIFI_HW_DISABLE;
 				usleep(FLASH_DELAY);
 				mem[WIFI_HW_STATUS_REG] = WIFI_HW_ENABLE;
-				//printf("Flashing!\n");
 
 				state->last_r = r_packets;
 				state->last_t = t_packets;
@@ -162,6 +159,8 @@ static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) 
 
 	FILE *f = fopen(SNIFF_FILE_SMRT, "r");
 	if (f == NULL) {
+		// This is not obvious: File is not exists if smrtd is not installed/enabled
+		// AUTO mode is expected in this state
 		state_cat = SMRT_STATE_OK;
 	} else {
 
@@ -184,6 +183,8 @@ static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) 
 #endif
 
 	if (state_cat == SMRT_STATE_OK) {
+		// Switch WAN to AUTO mode only once
+		// I don't want to rewrite user's rule 6 times per second :)
 		if (ctx->prev_state_cat != SMRT_STATE_OK) {
 			set_status(mem, DEV_WAN, ST_AUTO);
 #ifdef DEBUG
