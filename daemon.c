@@ -148,7 +148,6 @@ static bool iteration_network(volatile unsigned char *mem, struct network_state 
 }
 
 static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) {
-	(void)mem; (void) ctx;
 	char buffer[BUFFSIZE];
 	char status[MAX_LEN_STATUS];
 	int state_cat;
