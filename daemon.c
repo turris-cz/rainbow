@@ -50,6 +50,7 @@ struct network_state {
 };
 
 struct smrt_state {
+	bool manage_wan;
 	int prev_state_cat;
 	bool silent_second;
 };
@@ -156,6 +157,10 @@ static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) 
 	FILE *dbgf = fopen("/tmp/rainbow_debug", "a");
 #endif
 
+	if (!ctx->manage_wan) {
+		return true;
+	}
+
 	FILE *f = fopen(SNIFF_FILE_SMRT, "r");
 	if (f == NULL) {
 		// This is not obvious: File is not exists if smrtd is not installed/enabled
@@ -233,7 +238,11 @@ static bool iteration_smrt(volatile unsigned char *mem, struct smrt_state *ctx) 
 
 void do_some_daemon_stuff(volatile unsigned char *mem) {
 	struct network_state network = { 0, 0, false };
-	struct smrt_state smrt = { SMRT_STATE_OK, false };
+	struct smrt_state smrt = { true, SMRT_STATE_OK, false };
+
+	if ((mem[G_OVERRIDE_REG] & WAN_MASK) == 1) {
+		smrt.manage_wan = false;
+	}
 
 	while (true) {
 		iteration_network(mem, &network);
