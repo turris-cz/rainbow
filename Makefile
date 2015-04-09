@@ -1,5 +1,4 @@
 BIN=rainbow
-CC=$(STAGING_DIR)/toolchain-powerpc_8540_gcc-4.8-linaro_uClibc-0.9.33.2/bin/powerpc-openwrt-linux-gcc
 FLAGS=-Wall -Wextra -pedantic -std=gnu99 -O0 -g
 DEFINES=-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
