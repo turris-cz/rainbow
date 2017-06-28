@@ -47,7 +47,7 @@ static struct option long_options[] = {
 void help() {
 	fprintf(stdout,
 		"Usage:\n"
-		"  Show this help: rainbow --help of -h\n"
+		"  Show this help: rainbow --help or -h\n"
 		"  Start as daemon: rainbow -D DEV_CONFIGURATION [DEV_CONFIGURATION ...]]\n"
 		"  Set devices: rainbow DEV_CONFIGURATION [DEV_CONFIGURATION ...]\n"
 		"\n"
